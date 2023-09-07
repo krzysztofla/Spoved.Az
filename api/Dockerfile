@@ -17,4 +17,4 @@ RUN pip install -r /opt/spoved-api/requirements.txt
 WORKDIR /opt/spoved-api
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
 
-EXPOSE 443/tcp 8080/tcp
+EXPOSE 8080/tcp
