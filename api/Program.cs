@@ -1,7 +1,6 @@
 using Spoved.Api.Models;
 using Spoved.Api.Services;
 
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IMailService, MailService>();
