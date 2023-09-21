@@ -13,6 +13,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: alux-frontend-svc
+                name: spoved-frontend-svc
                 port: 
                   number: 80
