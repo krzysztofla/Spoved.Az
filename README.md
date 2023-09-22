@@ -2,7 +2,7 @@
 
 My personal side projec where I'm sharping my Cloud Engineering / DevOps skills.
 [This is work in progress]
-![image](docs/personal/2023-09-22 16.16.50.gif)
+![image](https://github.com/krzysztofla/Spoved.Az/blob/development/docs/personal/2023-09-22%2016.16.50.gif)
 ## Tech Stack
 
 - [x] React starter app based on YT tutorial
