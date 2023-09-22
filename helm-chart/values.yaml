@@ -37,7 +37,7 @@ backend:
       imagePullPolicy: Always
       image: krzysztofla/ziqq-docker-repo:spoved-api-net-core
       ports:
-        containerPort: 8000
+        containerPort: 80
         name: httpbackend
 
 
@@ -48,6 +48,6 @@ backend:
       app: spoved-backend
     ports:
       name:  port-backend
-      port: 8000
+      port: 80
       nodePort: 30008
       targetPort: httpbackend

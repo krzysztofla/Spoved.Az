@@ -1,11 +1,21 @@
-dependencies: 
-	pip install -r requirements.txt
-api_container:
-	docker build -t spoved-api ./api
-start_app:
-	uvicorn src.main:app --reload 
-lint:
-	black ./
+# docker 
+#--------------------------------------------
+api image:
+	docker build -t spoved.api.net.core ./api
 
+api tag image:
+	docker tag spoved-api.net.core:latest krzysztofla/ziqq-docker-repo:spoved-api-net-core
 
-# docker run --name spoved-api spoved-api
+api push image:
+	docker push krzysztofla/ziqq-docker-repo:spoved-api-net-core
+
+app image:
+	docker build -t spoved.app.react ./app
+
+app tag image:
+	docker tag spoved.app.react:latest krzysztofla/ziqq-docker-repo:spoved-app-react
+
+app push image:
+	docker push krzysztofla/ziqq-docker-repo:spoved-app-react
+#--------------------------------------------
+

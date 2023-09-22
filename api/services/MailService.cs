@@ -7,6 +7,7 @@ namespace Spoved.Api.Services
         public void SendMail(Mail mail)
         {
             mail.FirstName = "mail.FirstName;";
+            Console.WriteLine(mail);
         }
     }
 }
