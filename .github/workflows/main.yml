@@ -1,14 +1,15 @@
 name: Spoved APP - pipeline
 on:
+  push:
+    branches:
+    - development
   pull_request:
-    branches: [ main ]
+    branches:
+    - main
 
 jobs:
     provision_infrastructure:
         runs-on: ubuntu-latest
-        strategy:
-            matrix:
-              python-version: ["3.11"]
         defaults:
           run:
             working-directory: ./
