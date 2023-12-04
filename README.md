@@ -12,15 +12,15 @@ My personal side projec where I'm sharping my Cloud Engineering / DevOps skills.
 - [x] HELM
 - [x] Github Actions
 - [x] Azure [soon]
+- [x] Rancher k3s
 
 ## How to run localhost
+By using brew or chockolate please install below prerequsites:
 
 1. Install Docker
 2. Install Kubernetes
 3. Install HELM
-4. Install Minikube
-5. Install Qemu
-6. Install socket_vmnet
+4. Install k3d
 
 ## How to run on Mnikube with Qemu and host mapping
 
