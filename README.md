@@ -156,7 +156,7 @@ linkerd-viz
 ```bash
 linkerd viz dashboard &
 ```
-![image](https://github.com/krzysztofla/Spoved.Az/blob/development/docs/personal/linkerd_dashboard.png)
+![image](https://github.com/krzysztofla/Spoved.Az/blob/development/docs/service_mesh/linkerd_dashboard.png)
 
 ---
 ## Meshing our apps
@@ -184,4 +184,4 @@ deployment "spoved-backend-deploy" injected
 ```
 Great! Now pods are meshed with proxy and we can see all trafic going to and from them.
 
-![image](https://github.com/krzysztofla/Spoved.Az/blob/development/docs/personal/linkerd_meshed_pods.png)
+![image](https://github.com/krzysztofla/Spoved.Az/blob/development/docs/service_mesh/linkerd_meshed_pods.png)
