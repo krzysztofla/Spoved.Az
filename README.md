@@ -185,3 +185,51 @@ deployment "spoved-backend-deploy" injected
 Great! Now pods are meshed with proxy and we can see all trafic going to and from them.
 
 ![image](https://github.com/krzysztofla/Spoved.Az/blob/development/docs/service_mesh/linkerd_meshed_pods.png)
+
+---
+## Installing Jaeger, Prometheus and Grafana
+
+To gather all nececary informations about telemetry we have to install Jaeger, Prometheus and Grafana
+
+```bash
+linkerd jaeger install | kubectl apply --filename -    
+```
+
+```bash
+helm repo add grafana https://grafana.github.io/helm-charts
+helm install grafana -n grafana --create-namespace grafana/grafana \
+  -f https://raw.githubusercontent.com/linkerd/linkerd2/main/grafana/values.yaml
+```
+
+This is fed the default values.yaml file, which configures as a default datasource Linkerd Viz’ Prometheus instance, sets up a reverse proxy (more on that later), and pre-loads all the Linkerd Grafana dashboards.
+
+**Note!**
+
+The access to Linkerd Viz’ Prometheus instance is restricted through the prometheus-admin AuthorizationPolicy, granting access only to the metrics-api ServiceAccount. In order to also grant access to Grafana, you need to add an AuthorizationPolicy pointing to its ServiceAccount. You can apply authzpolicy-grafana.yaml which grants permission for the grafana ServiceAccount.
+```bash
+kubectl apply -f ./service_mesh/grafana/auth_policy_grafana.yaml    
+```
+
+**Hook Grafana with Linkerd Viz Dashboard**
+In the case of in-cluster Grafana instances (such as as the one from the Grafana Helm chart or the Grafana Operator mentioned above), make sure a reverse proxy is set up, as shown in the sample grafana/values.yaml file:
+```
+grafana.ini:
+  server:
+    root_url: '%(protocol)s://%(domain)s:/grafana/'
+```
+Then refer the location of your Grafana service in the Linkerd Viz values.yaml entry grafana.url. For example, if you installed the Grafana official Helm chart in the grafana namespace, you can install Linkerd Viz through the command line like so:
+```
+linkerd viz install --set grafana.url=grafana.grafana:3000 \
+  | kubectl apply -f -
+```
+
+**Now I suggest to restart the cluster**
+
+```bash
+k3d cluster stop spoved-k3s-cluster
+k3d cluster start spoved-k3s-cluster
+```
+
+Now we should be able to access the telemetry in real time like so:
+![image](https://github.com/krzysztofla/Spoved.Az/blob/development/docs/personal/linkerd_grafana_st.gif)
+![image](https://github.com/krzysztofla/Spoved.Az/blob/development/docs/personal/grafana.gif)
