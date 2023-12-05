@@ -231,5 +231,5 @@ k3d cluster start spoved-k3s-cluster
 ```
 
 Now we should be able to access the telemetry in real time like so:
-![image](https://github.com/krzysztofla/Spoved.Az/blob/development/docs/personal/linkerd_grafana_st.png)
-![image](https://github.com/krzysztofla/Spoved.Az/blob/development/docs/personal/grafana.png)
+![image](https://github.com/krzysztofla/Spoved.Az/blob/development/docs/service_mesh/linkerd_grafana_st.png)
+![image](https://github.com/krzysztofla/Spoved.Az/blob/development/docs/service_mesh/grafana.png)
