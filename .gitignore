@@ -354,3 +354,4 @@ MigrationBackup/
 src/appsettings.json
 
 **/.DS_Store
+docs/service_mesh/.DS_Store

@@ -10,9 +10,9 @@ My personal side projec where I'm sharping my Cloud Engineering / DevOps skills.
 - [x] Docker
 - [x] Kubernetes
 - [x] HELM
-- [x] Github Actions
+- [x] Github Actions[soon]
 - [x] Azure [soon]
-- [x] Rancher k3s
+- [x] K3D
 
 ## How to run localhost
 By using brew or chockolate please install below prerequsites:
@@ -233,3 +233,16 @@ k3d cluster start spoved-k3s-cluster
 Now we should be able to access the telemetry in real time like so:
 ![image](https://github.com/krzysztofla/Spoved.Az/blob/development/docs/service_mesh/linkerd_grafana_st.png)
 ![image](https://github.com/krzysztofla/Spoved.Az/blob/development/docs/service_mesh/grafana.png)
+
+---
+
+## Debugging
+
+To display pod logs type below command where:
+
+kubectl logs -f <name of the pod> <inital container name>
+
+```bash
+kubectl logs -f spoved-backend-deploy-57b4558fd6-gfsmm spoved-backend
+```
+*** easiest way to obtain above informations is to ```bash kubectl describe``` pod that you are interested. This is because Linkerd works by injecting an additional container into your pods; this is known as the "sidecar" pattern. Your application (or better said container) logs are still accessible, however, as a result of having more than one container in the pod, kubectl requires you to explicitly specify the container name.
