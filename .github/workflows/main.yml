@@ -22,7 +22,7 @@ jobs:
         
           # Install the preferred version of Terraform CLI 
         - name: HashiCorp - Setup Terraform
-          uses: hashicorp/setup-terraform@v2.0.3
+          uses: hashicorp/setup-terraform@v3
 
            # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
         - name: Terraform Init
@@ -35,7 +35,11 @@ jobs:
             RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
             STORAGE_ACCOUNT: ${{ secrets.STORAGE_ACCOUNT }}
             CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
-          run: terraform init -backend-config="storage_account_name=$STORAGE_ACCOUNT" -backend-config="container_name=$CONTAINER_NAME" -backend-config="client_id=$AZ_CLIENT_ID" -backend-config="client_secret=$AZ_CLIENT_SECRET" -backend-config="resource_group_name=$RESOURCE_GROUP" -backend-config="location=polandcentral" -backend-config="aks_cluster_name=spoved-azure-cluster" -backend-config="aks_node_count=1" -backend-config="aks_node_vm_size=Standard_A2"
+          run: terraform init -backend-config="storage_account_name=$STORAGE_ACCOUNT" \
+              -backend-config="container_name=$CONTAINER_NAME" \
+              -backend-config="client_id=$AZ_CLIENT_ID" \
+              -backend-config="client_secret=$AZ_CLIENT_SECRET" \
+              -backend-config="resource_group_name=$RESOURCE_GROUP" 
 
 
         # Run a terraform plan for pull requests only
