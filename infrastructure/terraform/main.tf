@@ -6,6 +6,7 @@ terraform {
     }
   }
   backend "azurerm" {
+    subscription_id      = "subscription"
     resource_group_name  = "resource_group_name"
     storage_account_name = "client_id"
     container_name       = "container_name"
