@@ -36,10 +36,10 @@ jobs:
             STORAGE_ACCOUNT: ${{ secrets.STORAGE_ACCOUNT }}
             CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
           run: terraform init \ 
-              -backend-config="subscription_id=$AZ_SUBSCRIPTION_ID" \
-              -backend-config="tenant_id=$AZ_TENANT_ID" \
-              -backend-config="client_id=$AZ_CLIENT_ID" \ 
-              -backend-config="client_secret=$AZ_CLIENT_SECRET" \
+              -var subscription_id="$AZ_SUBSCRIPTION_ID" \
+              -var tenant_id="$AZ_TENANT_ID" \
+              -var client_id="$AZ_CLIENT_ID" \ 
+              -var client_secret="$AZ_CLIENT_SECRET" \
               -backend-config="resource_group_name=$RESOURCE_GROUP" \ 
               -backend-config="storage_account_name=$STORAGE_ACCOUNT" \ 
               -backend-config="container_name=$CONTAINER_NAME"
