@@ -5,10 +5,14 @@ terraform {
       version = "=3.0.0"
     }
   }
+
   backend "azurerm" {
-    subscription_id      = "subscription"
+    subscription_id      = "subscription_id"
+    tenant_id       = "tenant_id"
+    client_id       = "client_id"
+    client_secret   = "client_secret"
     resource_group_name  = "resource_group_name"
-    storage_account_name = "client_id"
+    storage_account_name = "storage_account_name"
     container_name       = "container_name"
     key                  = "prod.terraform.tfstate"
   }
