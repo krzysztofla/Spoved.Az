@@ -14,6 +14,14 @@ jobs:
           run:
             shell: bash 
             working-directory: ./infrastructure/terraform
+        env:
+          AZ_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          AZ_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+          AZ_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          AZ_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
+          STORAGE_ACCOUNT: ${{ secrets.STORAGE_ACCOUNT }}
+          CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
         
         steps:
         # Checkout the repository to the GitHub Actions runner
@@ -27,29 +35,9 @@ jobs:
            # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
         - name: Terraform Init
           id: init
-          env:
-            AZ_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-            AZ_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-            AZ_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-            AZ_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-            RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
-            STORAGE_ACCOUNT: ${{ secrets.STORAGE_ACCOUNT }}
-            CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
-          run: terraform init \ 
-              -var subscription_id="$AZ_SUBSCRIPTION_ID" \
-              -var tenant_id="$AZ_TENANT_ID" \
-              -var client_id="$AZ_CLIENT_ID" \ 
-              -var client_secret="$AZ_CLIENT_SECRET" \
-              -backend-config="resource_group_name=$RESOURCE_GROUP" \ 
-              -backend-config="storage_account_name=$STORAGE_ACCOUNT" \ 
-              -backend-config="container_name=$CONTAINER_NAME"
+          run: terraform init 
 
         # Run a terraform plan for pull requests only
         - name: Terraform Plan
           id: plan
-          env:
-            ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-            ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-            ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-            ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
           run: terraform plan -no-color -input=false
