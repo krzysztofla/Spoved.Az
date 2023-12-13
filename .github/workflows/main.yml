@@ -39,5 +39,5 @@ jobs:
 
         - name: Terraform Apply
           id: apply
-          run: terraform plan -auto-approve -input=false -var="aks_client_id=$AKS_CLIENT_ID" -var="aks_client_secret=$AKS_CLIENT_SECRET"
+          run: terraform plan -input=false -var="aks_client_id=$AKS_CLIENT_ID" -var="aks_client_secret=$AKS_CLIENT_SECRET"
           working-directory: ${{ env.ROOT_PATH }} 
