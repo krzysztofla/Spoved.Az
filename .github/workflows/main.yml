@@ -19,6 +19,8 @@ jobs:
           ARM_TENANT_ID: ${{ secrets.AZ_TENANT_ID }}
           ARM_CLIENT_ID: ${{ secrets.AZ_CLIENT_ID }}
           ARM_CLIENT_SECRET: ${{ secrets.AZ_CLIENT_SECRET }}
+          AKS_CLIENT_ID: ${{secrets.AKS_SP_CLIENT_ID}}
+          AKS_CLIENT_SECRET: ${{secrets.AKS_SP_CLIENT_SECRET}}
         
         steps:
         # Checkout the repository to the GitHub Actions runner
@@ -35,7 +37,8 @@ jobs:
           run: terraform init
           working-directory: ${{ env.ROOT_PATH }}
 
-        # # Run a terraform plan for pull requests only
-        # - name: Terraform Plan
-        #   id: plan
-        #   run: terraform plan -no-color -input=false
+        # Run a terraform plan for pull requests only
+        - name: Terraform Plan
+          id: plan
+          run: terraform plan -no-color -input=false -var="aks_client_id=$AKS_CLIENT_ID" -var="aks_client_SECRET=$AKS_CLIENT_SECRETGB"
+          working-directory: ${{ env.ROOT_PATH }}
