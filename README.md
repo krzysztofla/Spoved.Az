@@ -246,3 +246,10 @@ kubectl logs -f <name of the pod> <inital container name>
 kubectl logs -f spoved-backend-deploy-57b4558fd6-gfsmm spoved-backend
 ```
 *** easiest way to obtain above informations is to ```bash kubectl describe``` pod that you are interested. This is because Linkerd works by injecting an additional container into your pods; this is known as the "sidecar" pattern. Your application (or better said container) logs are still accessible, however, as a result of having more than one container in the pod, kubectl requires you to explicitly specify the container name.
+
+
+#
+# Azure Cloud
+
+Provisioning ingrastructure by runnin Github Actions workflow build with Terraform.
+
