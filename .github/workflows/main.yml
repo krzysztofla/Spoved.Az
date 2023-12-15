@@ -1,12 +1,19 @@
 name: Spoved APP - pipeline
 on:
   workflow_dispatch:
+    inputs:
+      provision_aks_infrastructure:
+        description: 'Provision AKS Infrastructure'
+        required: true
+        type: boolean
+        default: false
   pull_request:
     branches:
     - main
 
 jobs:
     provision_infrastructure:
+        if: ${{github.event.inputs.provision_aks_infrastructure}} == true
         runs-on: ubuntu-latest
         defaults:
           run:
