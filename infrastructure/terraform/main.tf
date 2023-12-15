@@ -27,15 +27,10 @@ variable "aks_client_secret" {
   type = string
 }
 
-# resource "azurerm_resource_group" "aks" {
-#   name     = "cloud-labs-dev"
-#   location = "polandcentral"
-# }
-
 resource "azurerm_kubernetes_cluster" "aks" {
   name                = "spoved-az-cluster"
-  location            = azurerm_resource_group.aks.location
-  resource_group_name = azurerm_resource_group.aks.name
+  location            = "polandcentral"
+  resource_group_name = "cloud-labs-dev"
   dns_prefix          = "spoved-dev"
   kubernetes_version  = "1.28.2"
 
