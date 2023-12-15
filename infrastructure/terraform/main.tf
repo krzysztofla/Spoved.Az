@@ -32,7 +32,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   location            = "polandcentral"
   resource_group_name = "cloud-labs-dev"
   dns_prefix          = "spoved-dev"
-  kubernetes_version  = "1.28.2"
+  kubernetes_version  = "1.28.3"
 
   default_node_pool {
     name       = "default"
