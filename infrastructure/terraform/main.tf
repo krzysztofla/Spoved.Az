@@ -27,10 +27,10 @@ variable "aks_client_secret" {
   type = string
 }
 
-resource "azurerm_resource_group" "aks" {
-  name     = "cloud-labs-dev"
-  location = "polandcentral"
-}
+# resource "azurerm_resource_group" "aks" {
+#   name     = "cloud-labs-dev"
+#   location = "polandcentral"
+# }
 
 resource "azurerm_kubernetes_cluster" "aks" {
   name                = "spoved-az-cluster"
