@@ -352,3 +352,6 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 src/appsettings.json
+
+**/.DS_Store
+docs/service_mesh/.DS_Store
