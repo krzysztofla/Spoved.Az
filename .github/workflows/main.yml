@@ -2,8 +2,13 @@ name: Spoved APP - pipeline
 on:
   workflow_dispatch:
     inputs:
-      provision_aks_infrastructure:
+      provision_aks:
         description: 'Provision AKS Infrastructure'
+        required: true
+        type: boolean
+        default: false
+      provision_az_dns:
+        description: 'Provision Azure DNS Zone'
         required: true
         type: boolean
         default: false
@@ -12,14 +17,14 @@ on:
     - main
 
 jobs:
-    provision_infrastructure:
-        if: inputs.provision_aks_infrastructure == true
+    provision_aks:
+        if: inputs.provision_aks == true
         runs-on: ubuntu-latest
         defaults:
           run:
             shell: bash 
         env:
-          ROOT_PATH: '${{github.workspace}}/infrastructure/terraform'
+          ROOT_PATH: '${{github.workspace}}/infrastructure/aks'
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZ_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.AZ_TENANT_ID }}
           ARM_CLIENT_ID: ${{ secrets.AZ_CLIENT_ID }}
@@ -48,3 +53,41 @@ jobs:
           id: apply
           run: terraform apply -input=false -auto-approve -var="aks_client_id=$AKS_CLIENT_ID" -var="aks_client_secret=$AKS_CLIENT_SECRET"
           working-directory: ${{ env.ROOT_PATH }} 
+    
+    provision_az_dns:
+        if: inputs.provision_az_dns == true
+        runs-on: ubuntu-latest
+        defaults:
+          run:
+            shell: bash
+        env:
+          ROOT_PATH: '${{github.workspace}}/infrastructure/dns'
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZ_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZ_TENANT_ID }}
+          ARM_CLIENT_ID: ${{ secrets.AZ_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.AZ_CLIENT_SECRET }}
+          AKS_CLIENT_ID: ${{secrets.AKS_SP_CLIENT_ID}}
+          AKS_CLIENT_SECRET: ${{secrets.AKS_SP_CLIENT_SECRET}}
+
+        steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+      
+        - name: HashiCorp - Setup Terraform
+          uses: hashicorp/setup-terraform@v3
+
+        - name: Terraform Init
+          id: init
+          run: terraform init
+          working-directory: ${{ env.ROOT_PATH }}
+
+        - name: Terraform Plan
+          id: plan
+          run: terraform plan -lock=false -var="aks_client_id=$AKS_CLIENT_ID" -var="aks_client_secret=$AKS_CLIENT_SECRET"
+          working-directory: ${{ env.ROOT_PATH }}
+
+        - name: Terraform Apply
+          id: apply
+          run: terraform apply -input=false -auto-approve -var="aks_client_id=$AKS_CLIENT_ID" -var="aks_client_secret=$AKS_CLIENT_SECRET"
+          working-directory: ${{ env.ROOT_PATH }} 
+    

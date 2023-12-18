@@ -253,3 +253,14 @@ kubectl logs -f spoved-backend-deploy-57b4558fd6-gfsmm spoved-backend
 
 Provisioning ingrastructure by runnin Github Actions workflow build with Terraform.
 
+Login to Azure Cli to get AKS credantials. 
+```bash
+az login
+```
+
+Next step is to get cluster context in .kube/config
+```bash
+az aks get-credentials --resource-group <rg name> --name <cluster name>
+```
+
+
