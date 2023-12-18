@@ -13,7 +13,7 @@ terraform {
     resource_group_name  = "cloud-labs-dev"
     storage_account_name = "tfstatestorage0"
     container_name       = "tfstate"
-    key                  = "dev.terraform.tfstate"
+    key                  = "dev.aks.terraform.tfstate"
   }
 }
 
