@@ -83,11 +83,11 @@ jobs:
 
         - name: Terraform Plan
           id: plan
-          run: terraform plan -lock=false -var="aks_client_id=$AKS_CLIENT_ID" -var="aks_client_secret=$AKS_CLIENT_SECRET"
+          run: terraform plan -lock=false
           working-directory: ${{ env.ROOT_PATH }}
 
         - name: Terraform Apply
           id: apply
-          run: terraform apply -input=false -auto-approve -var="aks_client_id=$AKS_CLIENT_ID" -var="aks_client_secret=$AKS_CLIENT_SECRET"
+          run: terraform apply -input=false
           working-directory: ${{ env.ROOT_PATH }} 
     
