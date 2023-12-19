@@ -18,6 +18,6 @@ terraform {
 }
 
 resource "azurerm_dns_zone" "example" {
-  name                = "spoved.app"  
+  name                = "spoved.app.com"  
   resource_group_name = "cloud-labs-dev"
 }

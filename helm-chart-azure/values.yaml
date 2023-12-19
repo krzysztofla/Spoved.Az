@@ -1,0 +1,53 @@
+frontend:
+  labels:
+    app: spoved-frontend
+
+  deploy:
+    name: spoved-frontend-deploy
+    replicas: 1
+    containers:
+      name: spoved-frontend
+      imagePullPolicy: Always
+      image: krzysztofla/ziqq-docker-repo:spoved-app-react
+      ports:
+        containerPort: 80
+        name: httpfrontend
+
+  service:
+    name: spoved-frontend-svc
+    type: LoadBalancer
+    labels:
+      app: spoved-frontend
+    ports:
+      name:  port-frontend
+      port: 80
+      nodePort: 30017
+      targetPort: httpfrontend
+
+
+backend:
+  labels:
+    app: spoved-backend
+
+  deploy:
+    name: spoved-backend-deploy
+    replicas: 1
+    containers:
+      name: spoved-backend
+      imagePullPolicy: Always
+      image: krzysztofla/ziqq-docker-repo:spoved-api-net-core
+      ports:
+        containerPort: 80
+        name: httpbackend
+
+
+  service:
+    name: spoved-backend-svcs
+    type: LoadBalancer
+    labels:
+      app: spoved-backend
+    ports:
+      name:  port-backend
+      port: 80
+      nodePort: 30008
+      targetPort: httpbackend

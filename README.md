@@ -263,4 +263,53 @@ Next step is to get cluster context in .kube/config
 az aks get-credentials --resource-group <rg name> --name <cluster name>
 ```
 
+Create Azure DNS Zone to register DNS record - see terraform fod dns creation.
 
+After DNS Zone creation check if zone is created:
+```bash
+az network dns zone list --query "[?name=='spoved.app.pl']" --output table
+```
+
+Authorizing access Azure DNS
+The AKS cluster must be configured to allow external-dns pod to access access Azure DNS zone. This can be done using the kubelet identity, which is the user assigned managed identity that assigned to the nodepools (managed by VMSS) before their creation.
+
+📔 NOTE: A managed identity (previously called MSI or managed service identity) is a wrapper around service principals to make management simpler. Essentially, they are mapped to an Azure resource, so that when the Azure resource no longer exists, the associated service principal will be removed automatically.
+
+Getting scope:
+```bash
+/subscriptions/<subscription id>/resourceGroups/<resource group name>/providers/Microsoft.Network/dnszones/<zone name>/
+```
+
+```bash
+#######
+# Fetch DNS Scope, e.g. 
+#  /subscriptions/$AZ_SUBSCRIPTION_ID/resourceGroups/$AZ_RESOURCE_GROUP/providers/Microsoft.Network/dnszones/$AZ_DNS_DOMAIN/
+#############
+export AZ_DNS_SCOPE=$(
+  az network dns zone list \
+    --query "[?name=='$AZ_DNS_DOMAIN'].id" \
+    --output table | tail -1
+)
+
+#######
+# Fetch Kubelet identity, i.e. managed identity assigned to node pools managed by VMSS
+#############
+export AZ_PRINCIPAL_ID=$(
+  az aks show -g $AZ_RESOURCE_GROUP -n $AZ_CLUSTER_NAME \
+    --query "identityProfile.kubeletidentity.objectId" \
+    --output tsv
+)
+
+#######
+# Assign role to kubelet identity that allows ALL pods to update DNS records
+#############
+az role assignment create \
+  --assignee $AZ_PRINCIPAL_ID \
+  --role "DNS Zone Contributor" \
+  --scope "$AZ_DNS_SCOPE"
+
+```
+
+Sources:
+
+[AKS with External DNS](https://joachim8675309.medium.com/extending-aks-with-external-dns-3da2703b9d52)
