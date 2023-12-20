@@ -8,7 +8,7 @@ frontend:
     containers:
       name: spoved-frontend
       imagePullPolicy: Always
-      image: krzysztofla/ziqq-docker-repo:spoved-app-reactx86
+      image: krzysztofla/ziqq-docker-repo:spoved-app-react-x86
       ports:
         containerPort: 80
         name: httpfrontend
@@ -35,7 +35,7 @@ backend:
     containers:
       name: spoved-backend
       imagePullPolicy: Always
-      image: krzysztofla/ziqq-docker-repo:spoved-api-net-core
+      image: krzysztofla/ziqq-docker-repo:spoved-api-net-core-x86
       ports:
         containerPort: 80
         name: httpbackend
