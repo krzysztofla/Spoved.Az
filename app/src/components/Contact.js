@@ -26,7 +26,7 @@ export const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setButtonText("Sending...");
-    let response = await fetch("http://spoved-app-example.local:30008/contact", {
+    let response = await fetch("http://localhost:30008/contact", {
       method: "POST",
       headers: {
         "Content-Type": "application/json;charset=utf-8",

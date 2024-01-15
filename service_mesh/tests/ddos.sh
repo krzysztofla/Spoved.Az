@@ -1,4 +1,5 @@
 url=http://localhost:30008/
+url_azure=http://20.215.80.155
 
 number_requests=20
 

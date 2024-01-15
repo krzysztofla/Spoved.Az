@@ -13,7 +13,7 @@ terraform {
     resource_group_name  = "cloud-labs-dev"
     storage_account_name = "tfstatestorage0"
     container_name       = "tfstate"
-    key                  = "dev.terraform.tfstate"
+    key                  = "dev.aks.terraform.tfstate"
   }
 }
 
@@ -40,9 +40,8 @@ resource "azurerm_kubernetes_cluster" "aks" {
     vm_size    = "Standard_DS2_v2"
   }
 
-  service_principal {
-    client_id     = var.aks_client_id
-    client_secret = var.aks_client_secret
+  identity {
+    type = "SystemAssigned"
   }
 
   network_profile {

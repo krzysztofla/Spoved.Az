@@ -163,6 +163,8 @@ linkerd viz dashboard &
 
 Now to make informations about our apps visible in dashboard we have to mesh it. We can do this on a live application without downtime, thanks to Kubernetes’s rolling deploys. 
 
+Meshing is basicly using sidecar pattern for Kubernetes. Sidecar containers are the secondary containers that run along with the main application container within the same Pod. These containers are used to enhance or to extend the functionality of the main application container by providing additional services, or functionality such as logging, monitoring, security, or data synchronization, without directly altering the primary application code.
+
 At the first place let's make sure that deployments are on place:
 ```bash
 kubectl get deploy 
@@ -200,6 +202,37 @@ helm repo add grafana https://grafana.github.io/helm-charts
 helm install grafana -n grafana --create-namespace grafana/grafana \
   -f https://raw.githubusercontent.com/linkerd/linkerd2/main/grafana/values.yaml
 ```
+helm install grafana -n grafana --create-namespace grafana/grafana \               ⎈ spoved-az-cluster  11:38:28
+  -f https://raw.githubusercontent.com/linkerd/linkerd2/main/grafana/values.yaml
+NAME: grafana
+LAST DEPLOYED: Wed Dec 20 11:38:38 2023
+NAMESPACE: grafana
+STATUS: deployed
+REVISION: 1
+NOTES:
+1. Get your 'admin' user password by running:
+
+   kubectl get secret --namespace grafana grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+
+2. The Grafana server can be accessed via port 80 on the following DNS name from within your cluster:
+
+   grafana.grafana.svc.cluster.local
+
+   Get the Grafana URL to visit by running these commands in the same shell:
+     export POD_NAME=$(kubectl get pods --namespace grafana -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=grafana" -o jsonpath="{.items[0].metadata.name}")
+     kubectl --namespace grafana port-forward $POD_NAME 3000
+
+3. Login with the password from step 1 and the username: admin
+#################################################################################
+######   WARNING: Persistence is disabled!!! You will lose your data when   #####
+######            the Grafana pod is terminated.                            #####
+#################################################################################
+  export POD_NAME=$(kubectl get pods --namespace grafana -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=grafana" -o jsonpath="{.items[0].metadata.name}")
+ kubectl --namespace grafana port-forward $POD_NAME 3000  
+                          
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
 
 This is fed the default values.yaml file, which configures as a default datasource Linkerd Viz’ Prometheus instance, sets up a reverse proxy (more on that later), and pre-loads all the Linkerd Grafana dashboards.
 
@@ -218,7 +251,8 @@ grafana.ini:
     root_url: '%(protocol)s://%(domain)s:/grafana/'
 ```
 Then refer the location of your Grafana service in the Linkerd Viz values.yaml entry grafana.url. For example, if you installed the Grafana official Helm chart in the grafana namespace, you can install Linkerd Viz through the command line like so:
-```
+
+```bash
 linkerd viz install --set grafana.url=grafana.grafana:3000 \
   | kubectl apply -f -
 ```
@@ -246,3 +280,72 @@ kubectl logs -f <name of the pod> <inital container name>
 kubectl logs -f spoved-backend-deploy-57b4558fd6-gfsmm spoved-backend
 ```
 *** easiest way to obtain above informations is to ```bash kubectl describe``` pod that you are interested. This is because Linkerd works by injecting an additional container into your pods; this is known as the "sidecar" pattern. Your application (or better said container) logs are still accessible, however, as a result of having more than one container in the pod, kubectl requires you to explicitly specify the container name.
+
+
+#
+# Azure Cloud
+
+Provisioning ingrastructure by runnin Github Actions workflow build with Terraform.
+
+Login to Azure Cli to get AKS credantials. 
+```bash
+az login
+```
+
+Next step is to get cluster context in .kube/config
+```bash
+az aks get-credentials --resource-group <rg name> --name <cluster name>
+```
+
+Now deploy apps and mesh them using Linkerd by running below commands one by one.
+
+```bash
+# install apps
+helm install spoved-chart-azure ./helm-chart-azure
+
+# check if cluster is passing requirements
+linkerd check --pre
+
+# install linkerd
+linkerd install --crds | kubectl apply -f -
+linkerd install | kubectl apply -f -
+```
+
+Mesh the app deployments by running:
+```bash
+kubectl get deploy -o yaml | linkerd inject - | kubectl apply -f -
+```
+Insall dashboard
+```bash
+linkerd viz install | kubectl apply -f -
+```
+
+Show dashboard
+```bash
+linkerd viz dashboard &    
+```
+
+
+## Removing extensions
+
+To remove any extension, call its uninstall subcommand and pipe it to kubectl delete -f -. For the bundled extensions that means:
+
+# To remove Linkerd Viz
+```
+linkerd viz uninstall | kubectl delete -f -
+```
+
+# To remove Linkerd Jaeger
+```
+linkerd jaeger uninstall | kubectl delete -f -
+```
+
+# To remove Linkerd Multicluster
+```
+linkerd multicluster uninstall | kubectl delete -f -
+```
+
+# Removing control plane
+```
+linkerd uninstall | kubectl delete -f -
+```
